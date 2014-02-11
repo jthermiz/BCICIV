@@ -32,4 +32,28 @@ for f=1:fing_num
     z=1;
 end
 
+% %Test Code for this function 
+% n=size(train_dg,1);
+% num_fing=size(train_dg,2);
+% bin_dg=zeros(n,num_fing);
+% 
+% 
+% for i=1:num_fing
+%     for j=1:size(ts_mat(:,1:2),1)
+%         t1=ts_mat(j,2*i-1);
+%         t2=ts_mat(j,2*i);
+%         if t1==0 && t2==0
+%             break;
+%         end
+%         bin_dg(t1:t2,i)=1;
+%     end
+% end
+% 
+% i=1;
+% subplot(2,1,1), plot(train_dg(:,i))
+% subplot(2,1,2), plot(bin_dg(:,i))
+
 end
+
+
+
