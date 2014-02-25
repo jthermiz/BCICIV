@@ -1,30 +1,45 @@
-function [ timeStampMat ] = findFingerFlex( train_dg, TW_DUR, Fs )
-% Description: parse EMG data for finger flex time windows
+function [ timeStampMat, timeStampMatTrunc ] = findFingerFlex( train_dg, TW_DUR, Fs )
+% Description: parse for finger flex time windows
 % Inputs: the finger flex data
 % Ouput: a matrix filled with time stamps. each column
 %         represents a finger channel. each entry in a column
 %         represents the start of a finger flex event that lasts TW_DUR
 
+%thresold
 thres=1;
-buf=0.25*Fs;               %sec * sample/sec
+
+%margain on either side of time window of detected finger flex
+buf=(TW_DUR-2*Fs)/2;                %sec * sample/sec
+
+
+%time window for finger flex
 dur=TW_DUR;
-%dur=2.5*Fs;                %sec * sample/sec
+
+%number of fingers
 fing_num=size(train_dg,2);
+
+%window length for detecting threshold
+wind=250;                        %sample
+
+%initializations
 z=1;
-i=1;
+i=1+buf;
 
 for f=1:fing_num
-    while i < size(train_dg,1)
+    while (i+wind) < size(train_dg,1)
         
-        if train_dg(i,f)>thres
+        if mean(train_dg(i:i+wind,f)) > thres
+            %if train_dg(i,f)>thres %old single point threshold detector
+            i=i+ceil(wind/2); %new time window averaging method
+            
+            
             t1=i-buf;
             t2=t1+dur;
             if t2>size(train_dg,1) %don't count event that happens "too" close
-                                   %to end 
+                %to end
                 break
             end
             timeStampMat(z,f)=t1;
-            %timeStampMat(z,2*f-1)=t1; timeStampMat(z,2*f)=t2;
             z=z+1;
             i=t2+1;
         else
@@ -32,30 +47,20 @@ for f=1:fing_num
         end
         
     end
-    i=1;
+    i=1+buf;
     z=1;
 end
 
-% %Test Code for this function 
-% n=size(train_dg,1);
-% num_fing=size(train_dg,2);
-% bin_dg=zeros(n,num_fing);
-% 
-% 
-% for i=1:num_fing
-%     for j=1:size(ts_mat(:,1:2),1)
-%         t1=ts_mat(j,2*i-1);
-%         t2=ts_mat(j,2*i);
-%         if t1==0 && t2==0
-%             break;
-%         end
-%         bin_dg(t1:t2,i)=1;
-%     end
-% end
-% 
-% i=1;
-% subplot(2,1,1), plot(train_dg(:,i))
-% subplot(2,1,2), plot(bin_dg(:,i))
+x=nan(fing_num,1);
+for f=1:fing_num
+    tmp=find(timeStampMat(:,f)==0,1);
+    if isempty(tmp)
+        x(f)=length(timeStampMat(:,f));
+    else
+        x(f)=tmp-1;
+    end
+end
+timeStampMatTrunc=timeStampMat(1:min(x),:);
 
 end
 

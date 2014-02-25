@@ -1,29 +1,32 @@
-function [ rs_vec ] = findRest( ts_mat,TW_DUR, TS_MAX, Fs )
-%Still needs work since there are no rest time window large enough!!
-buf=0.25*Fs;
+function [ rs_vec ] = findRest( ts_mat,TW_DUR,RS_DUR,TS_MAX,Fs )
+%Returns rs_vec, which has time stamps for the start of rest periods
+
+%vectorize ts_mat
 ts_vec=ts_mat(:);
-zero_flag=find(ts_mat(1,:)==0,1);
+
+%sort time events chronlogically
 ts_vec=unique(ts_vec);
 
-if isempty(zero_flag)
-    ts_vec=ts_vec(2:end);
-end
-
-
+%add last possible data point (TS_MAX) to vector
 ts_vec=cat(1,ts_vec,TS_MAX);
+
+%initialize as -1.. if there no rest events, this vectors return -1
 rs_vec=-1;
 
-EV_num=length(ts_vec);
+%rest duration
+rs_dur=RS_DUR;
+
+ev_num=length(ts_vec);
 z=1;
-for EV=1:EV_num-1
-    EV1=ts_vec(EV);
-    EV2=ts_vec(EV+1);
-    tw_num=floor((EV2-EV1-2*buf-TW_DUR)/TW_DUR);
+for ev=1:ev_num-1
+    ev1=ts_vec(ev);
+    ev2=ts_vec(ev+1);
+    tw_num=floor((ev2-ev1-TW_DUR)/rs_dur);
     for tw=1:tw_num
         if tw==1
-            rs_vec(z)=EV1+TW_DUR+buf;
+            rs_vec(z)=ev1+TW_DUR;
         else
-            rs_vec(z)=rs_vec(z-1)+TW_DUR+1;
+            rs_vec(z)=rs_vec(z-1)+TW_DUR;
         end
         z=z+1;
     end    
