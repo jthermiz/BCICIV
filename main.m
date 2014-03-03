@@ -31,7 +31,7 @@ rs_vec=findRest(ts_mat,TW_DUR,RS_DUR,TS_MAX,Fs);
 flex_tm=createTimeSeriesMat(train_data,ts_mat,TW_DUR);
 rest_tm=createTimeSeriesMat(train_data,rs_vec,RS_DUR);
 
-[flex_pow, flex_f]=avgManySpect(flex_tm);
+[flex_pow, flex_f]=avgManySpect(flex_tm());
 [rest_pow, rest_f]=avgManySpect(rest_tm);
 
 f_min=find(flex_f>15,1);
@@ -40,7 +40,8 @@ r_min=find(rest_f>15,1);
 r_max=find(rest_f>40,1);
 semilogy(flex_f(f_min:f_max),flex_pow(f_min:f_max),rest_f(r_min:r_max),rest_pow(r_min:r_max))
 legend('Finger Flex','Rest')
-
+xlabel('Frequency (Hz)')
+ylabel('Power')
 
 %-------------------------------------
 
@@ -68,10 +69,7 @@ legend('Finger Flex','Rest')
 % bin_dg=zeros(n,num_fing);
 % 
 % 
-% for i=1:num_fing
-%     for j=1:size(ts_mat(:,1:2),1)
-%         t1=ts_mat(j,i);
-%         t2=t1+TW_DUR;
+% for i=1:num_fing4
 %         if t1==0 
 %             break;
 %         end

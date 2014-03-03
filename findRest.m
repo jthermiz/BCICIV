@@ -32,5 +32,7 @@ for ev=1:ev_num-1
     end    
 end
 
+rs_vec=rs_vec';
+
 end
 

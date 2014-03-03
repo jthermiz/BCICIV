@@ -24,3 +24,5 @@ end
 avg_spect=S/(ev_num*class_num*ch_num);
 
 end
+
+
