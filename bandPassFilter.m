@@ -1,3 +1,7 @@
+%Example Code for band pass filter
+%Create a bandpass filter (butterworth) with 3db frequency
+%of low and high
+
 % d = fdesign.bandpass('N,F3dB1,F3dB2',10,0.1,2,Fs);
 % Hd = design(d,'butter');
 % fvtool(Hd)

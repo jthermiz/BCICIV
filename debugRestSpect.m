@@ -1,3 +1,6 @@
+%Was used to debug rest spectrum and find beta bump
+%avgManySpect together and plot on semilogy scale
+
 % close all
 % c='bgrmk';
 % hold on

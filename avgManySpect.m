@@ -1,3 +1,7 @@
+%Returns average power spectrum using multi-taper method
+%Takes tm as agrument which is 4D matrix of time series
+
+
 function [avg_spect, f]=avgManySpect(tm)
 
 params=[];
