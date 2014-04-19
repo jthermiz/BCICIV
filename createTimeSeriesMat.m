@@ -14,15 +14,19 @@ ch_num=size(train_data,2);
 %init tm matrix
 %tm is 4d... 1D=time series, 2D=number of events, 3D=class (or finger),
 %4D=ECoG channel number
-tm = nan(dur, size(ts, 1), size(ts, 2), ch_num);
+ev_num=sum(~ts(:)==-1);
+tm = nan(dur, ev_num, size(ts, 2), ch_num);
 
-for ev = 1:ev_max
-    for class = 1:class_num
-        for ch = 1:ch_num
+for class = 1:class_num
+    for ch = 1:ch_num   
+        ev=1;
+        while  ev<=size(ts,1) && ~(ts(ev,class)==-1)      
             tm (:, ev, class, ch) = train_data(ts(ev, class):ts(ev, class)+dur-1, ch);
+            ev=ev+1;            
         end
     end
 end
+
 
 
 end

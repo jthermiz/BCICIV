@@ -6,7 +6,7 @@ function [ timeStampMat, timeStampMatTrunc ] = findFingerFlex( train_dg, TW_DUR,
 %         represents the start of a finger flex event that lasts TW_DUR
 
 %thresold
-thres=1;
+thres=1.5;
 
 %margain on either side of time window of detected finger flex
 buf=(TW_DUR-2*Fs)/2;                %sec * sample/sec
@@ -51,6 +51,7 @@ for f=1:fing_num
     z=1;
 end
 
+%truncated version
 x=nan(fing_num,1);
 for f=1:fing_num
     tmp=find(timeStampMat(:,f)==0,1);
@@ -61,6 +62,10 @@ for f=1:fing_num
     end
 end
 timeStampMatTrunc=timeStampMat(1:min(x),:);
+
+%make timeStampMat -1 padded, not 0 padded
+pl=find(timeStampMat==0);
+timeStampMat(pl)=-1;
 
 end
 

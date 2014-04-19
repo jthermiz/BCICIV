@@ -7,6 +7,10 @@ ts_vec=ts_mat(:);
 %sort time events chronlogically
 ts_vec=unique(ts_vec);
 
+if ts_vec(1)==0
+    ts_vec=ts_vec(2:end);
+end
+
 %add last possible data point (TS_MAX) to vector
 ts_vec=cat(1,ts_vec,TS_MAX);
 
@@ -24,9 +28,9 @@ for ev=1:ev_num-1
     tw_num=floor((ev2-ev1-TW_DUR)/rs_dur);
     for tw=1:tw_num
         if tw==1
-            rs_vec(z)=ev1+TW_DUR;
+            rs_vec(z)=ev1+TW_DUR; %rest event occurs after flex event
         else
-            rs_vec(z)=rs_vec(z-1)+TW_DUR;
+            rs_vec(z)=rs_vec(z-1)+rs_dur; % each subsequenct rest event
         end
         z=z+1;
     end    
