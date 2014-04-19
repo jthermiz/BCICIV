@@ -87,7 +87,7 @@ for i=1:iter
     %% Support Vector Machines
     opts = statset('MaxIter',30000);
     % Train the classifier
-    svmStruct = svmtrain(Xtrain,Ytrain,'kernel_function','rbf','kktviolationlevel',0.1,'options',opts);
+    svmStruct = svmtrain(Xtrain,Ytrain,'kernel_function','linear','kktviolationlevel',0.1,'options',opts);
     
     % Make a prediction for the test set
     Y_svm = svmclassify(svmStruct,Xtest);
@@ -127,3 +127,4 @@ comparisonPlot( Cmat, labels_str )
 figure
 bar([Pmat])
 axis([0 6 min(Pmat)-.05 max(Pmat)])
+title('Prediction Accuracy vs Classification Method')
